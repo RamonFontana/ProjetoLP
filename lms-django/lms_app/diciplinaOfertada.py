@@ -1,4 +1,6 @@
 from django.db import models
+from lms_app.professor import Professor
+from lms_app.diciplina import Disciplina
 
 class DisciplinaOfertada(models.Model):
 
@@ -13,9 +15,14 @@ class DisciplinaOfertada(models.Model):
         semestre = len(DisciplinaOfertada.objects.filter(semestre=self.semestre))
         professor = len(DisciplinaOfertada.objects.filter(professor=self.professor))
         disciplina = len(DisciplinaOfertada.objects.filter(disciplina=self.disciplina))
+        qntProf = len(Professor.objects.all())
+        qntDisciplina = len(Disciplina.objects.all())
 
-        if (curso > 0 and turma > 0 and ano > 0 and semestre > 0 and professor > 0 and diciplina > 0):
+        if (curso > 0 and turma > 0 and ano > 0 and semestre > 0 and professor > 0 and disciplina > 0):
             raise Exception("Diciplina ofertada já existe")
+        
+        if(self.disciplina > qntDisciplina or self.professor > qntProf):
+            raise Exception("Id de professor ou diciplina está incorreta")
 
         super(DisciplinaOfertada,self).save()
 
